@@ -41,6 +41,8 @@ guessed = []
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 BLUE = (0, 0, 255)
+GREEN = (0, 200, 0)
+LIGHT_GREEN = (0, 255, 0)
 
 def draw():
 	win.fill(WHITE)
@@ -78,6 +80,45 @@ def display_message(message):
 	pygame.display.update()
 	pygame.time.delay(3000)
 
+def menu():
+	running = True
+
+	win.fill(WHITE)
+	
+	title = TITLE_FONT.render("Hangman's Game", 1, BLACK)
+	win.blit(title, (WIDTH/2 - title.get_width()/2, 100))
+
+	RECT_HEIGHT = 70
+	RECT_WIDTH = 180
+	rect_x = WIDTH/2 - RECT_WIDTH/2
+	rect_y = HEIGHT/2 - RECT_HEIGHT/2 + 80
+	
+	text = TITLE_FONT.render("PLAY", 1, BLACK)
+	text_x = rect_x + RECT_WIDTH/2 - text.get_width()/2
+	text_y = rect_y + RECT_HEIGHT/2 - text.get_height()/2
+	
+
+	while running:
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+			
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				m_x, m_y = pygame.mouse.get_pos()
+				if rect_x + RECT_WIDTH > m_x > rect_x and rect_y + RECT_HEIGHT > m_y > rect_y:
+					return True
+
+			mouse = pygame.mouse.get_pos()
+			if rect_x + RECT_WIDTH > mouse[0] > rect_x and rect_y + RECT_HEIGHT > mouse[1] > rect_y:
+				pygame.draw.rect(win, LIGHT_GREEN, (rect_x, rect_y, RECT_WIDTH, RECT_HEIGHT))
+				win.blit(text, (text_x, text_y))
+			else:
+				pygame.draw.rect(win, GREEN, (rect_x, rect_y, RECT_WIDTH, RECT_HEIGHT))
+				win.blit(text, (text_x, text_y))
+		
+		pygame.display.update()
+		
 
 def main():
 	global hangman_status
@@ -120,6 +161,7 @@ def main():
 			display_message("You LOST!")
 			break
 
+if menu():
+	main()
 
-main()
 pygame.quit()	
